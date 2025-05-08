@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dynamic CV Transformer</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        #spinner {
+            display: none;
+            margin-top: 15px;
+        }
+        button:disabled {
+            background-color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dynamic CV Transformer</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label>Upload Template (Word .docx)</label><br>
+        <input type="file" name="template" required><br><br>
+        <label>Upload Candidate CV (PDF)</label><br>
+        <input type="file" name="cv" required><br><br>
+        <button id="submitBtn" type="submit">Generate CV</button>
+        <div id="spinner">🔄 Processing... Please wait.</div>
+    </form>
+
+    <div id="result" style="margin-top: 30px;"></div>
+
+    <script>
+    const form = document.getElementById('uploadForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const spinner = document.getElementById('spinner');
+    const resultDiv = document.getElementById('result');
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        resultDiv.innerHTML = '';
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Processing...';
+        spinner.style.display = 'block';
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch('/transform', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <p><strong>${data.message}</strong></p>
+                    <a href="${data.downloadHtml}">Download HTML</a><br>
+                    <a href="${data.downloadDocx}">Download Word (DOCX)</a><br>
+                    <a href="${data.downloadPdf}">Download PDF</a>
+                `;
+            } else {
+                const errorText = await response.text();
+                resultDiv.innerHTML = `<p style="color:red;">Error: ${errorText}</p>`;
+            }
+        } catch (err) {
+            resultDiv.innerHTML = `<p style="color:red;">Unexpected error: ${err.message}</p>`;
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Generate CV';
+            spinner.style.display = 'none';
+        }
+    });
+    </script>
+</body>
+</html>
