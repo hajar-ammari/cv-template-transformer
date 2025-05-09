@@ -7,7 +7,6 @@ document.getElementById('transformForm').addEventListener('submit', async functi
     const result = document.getElementById('result');
     const error = document.getElementById('error');
     
-    // Show loading, hide other states
     loading.classList.remove('hidden');
     result.classList.add('hidden');
     error.classList.add('hidden');

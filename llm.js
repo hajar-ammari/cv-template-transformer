@@ -1,8 +1,4 @@
-// llm.js
-
 import OpenAI from 'openai';
-import fs from 'fs-extra';
-import { encode } from 'gpt-3-encoder';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -66,7 +62,7 @@ export async function extractDataWithLLM(cvText, requiredFields) {
 
 export async function generateFilledCVWithLLM(templateHtml, fields, data) {
     const prompt = `
-You are a strict HTML transformer assistant.
+You are a strict HTML transformer assistant with reasoning ability.
 
 You will be given:
 1. An HTML CV template.
@@ -75,6 +71,8 @@ You will be given:
 
 Your tasks:
 - Fill the template exactly using the data provided.
+- If some fields are missing from the data but can be logically deduced (for example: calculate total years of experience from job dates, estimate age from date of birth, deduce seniority levels, infer current job if end date is missing), then compute and fill them.
+- Be precise: do not guess data that cannot be logically deduced from the provided content.
 - Preserve all original styles, table layout, margins, and formatting.
 - The final HTML must look visually clean and respect standard page margins (2.5 cm top/bottom, 2 cm left/right).
 - If the content exceeds one page, it should flow naturally to additional pages (no content cutoff).

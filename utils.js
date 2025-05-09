@@ -1,11 +1,10 @@
 import fs from 'fs-extra';
-import path from 'path';
 import htmlDocx from 'html-docx-js';
 import pdf from 'html-pdf';
 
 export async function convertHtmlToDocx(htmlPath, baseName) {
     const html = fs.readFileSync(htmlPath, 'utf8');
-    const docxBuffer = await htmlDocx.asBlob(html);
+    const docxBuffer = htmlDocx.asBlob(html);
     const buffer = Buffer.from(await docxBuffer.arrayBuffer());
     const docxPath = `converted/${baseName}.docx`;
     fs.writeFileSync(docxPath, buffer);

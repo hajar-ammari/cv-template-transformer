@@ -45,7 +45,6 @@ app.post('/transform', upload.fields([{ name: 'template' }, { name: 'cv' }]), as
         const cvBuffer = fs.readFileSync(cvFile.path);
         const cvText = (await pdfParse(cvBuffer)).text;
 
-        // Sanitize fields to avoid passing complex structures
         const sanitizedFields = fieldsToFill.map(field =>
             typeof field === 'string' ? field.trim() : ''
         ).filter(f => f);
@@ -58,8 +57,8 @@ app.post('/transform', upload.fields([{ name: 'template' }, { name: 'cv' }]), as
         const htmlPath = `converted/${baseName}.html`;
         fs.writeFileSync(htmlPath, filledHtml);
 
-        const docxPath = await convertHtmlToDocx(htmlPath, baseName);
-        const pdfPath = await convertHtmlToPdf(htmlPath, baseName);
+        await convertHtmlToDocx(htmlPath, baseName);
+        await convertHtmlToPdf(htmlPath, baseName);
 
         res.json({
             message: 'CV successfully generated!',
