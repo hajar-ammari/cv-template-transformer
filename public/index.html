@@ -1,74 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Dynamic CV Transformer</title>
-    <link rel="stylesheet" href="/style.css">
-    <style>
-        #spinner {
-            display: none;
-            margin-top: 15px;
-        }
-        button:disabled {
-            background-color: #aaa;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CVTransformer Pro | AI-Powered Resume Conversion</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/favicon.svg">
 </head>
 <body>
-    <h1>Dynamic CV Transformer</h1>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <label>Upload Template (Word .docx)</label><br>
-        <input type="file" name="template" required><br><br>
-        <label>Upload Candidate CV (PDF)</label><br>
-        <input type="file" name="cv" required><br><br>
-        <button id="submitBtn" type="submit">Generate CV</button>
-        <div id="spinner">🔄 Processing... Please wait.</div>
-    </form>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo-container">
+        <img src="assets/logo.svg" alt="CVTransformer Pro" class="logo">
+        <span class="logo-text">CVTransformer<span class="pro-badge">PRO</span></span>
+      </div>
+      <nav class="main-nav">
+        <a href="#" class="nav-link active">Dashboard</a>
+        <a href="#" class="nav-link">Templates</a>
+        <a href="#" class="nav-link">Pricing</a>
+        <a href="#" class="nav-link">Docs</a>
+      </nav>
+      <div class="user-actions">
+        <button class="btn-notification">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge">3</span>
+        </button>
+        <div class="user-avatar">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+        </div>
+      </div>
+    </header>
 
-    <div id="result" style="margin-top: 30px;"></div>
+    <main class="main-content">
+      <div class="hero-section">
+        <div class="hero-text">
+          <h1 class="hero-title">Transform Resumes <span class="highlight">Instantly</span></h1>
+          <p class="hero-subtitle">AI-powered CV conversion with perfect formatting for any job application</p>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-number">15,892+</span>
+              <span class="stat-label">Resumes Transformed</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">98.7%</span>
+              <span class="stat-label">Success Rate</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">24/7</span>
+              <span class="stat-label">Support</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="assets/hero-illustration.svg" alt="CV Transformation">
+        </div>
+      </div>
 
-    <script>
-    const form = document.getElementById('uploadForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const spinner = document.getElementById('spinner');
-    const resultDiv = document.getElementById('result');
+      <div class="converter-card">
+        <div class="card-header">
+          <h2 class="card-title">Create Perfect Resume</h2>
+          <div class="card-tabs">
+            <button class="tab-btn active">Single File</button>
+            <button class="tab-btn">Batch Process</button>
+            <button class="tab-btn">API</button>
+          </div>
+        </div>
+        
+        <form id="uploadForm" enctype="multipart/form-data" class="converter-form">
+          <div class="file-upload-group">
+            <label class="upload-label">
+              <i class="fas fa-file-word"></i>
+              <span>Upload Template (.docx)</span>
+              <input type="file" name="template" required accept=".docx" class="file-input">
+              <div class="upload-hint">Company branded template</div>
+            </label>
+          </div>
+          
+          <div class="file-upload-group">
+            <label class="upload-label">
+              <i class="fas fa-file-pdf"></i>
+              <span>Upload Candidate CV (.pdf)</span>
+              <input type="file" name="cv" required accept=".pdf" class="file-input">
+              <div class="upload-hint">Original candidate resume</div>
+            </label>
+          </div>
 
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        resultDiv.innerHTML = '';
+          <div class="form-options">
+            <div class="option-group">
+              <label class="option-label">
+                <input type="checkbox" name="optimize" checked>
+                <span class="option-checkbox"></span>
+                <span>Optimize for ATS</span>
+              </label>
+            </div>
+            <div class="option-group">
+              <label class="option-label">
+                <input type="checkbox" name="branding" checked>
+                <span class="option-checkbox"></span>
+                <span>Add Company Branding</span>
+              </label>
+            </div>
+          </div>
 
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Processing...';
-        spinner.style.display = 'block';
+          <button id="submitBtn" type="submit" class="convert-btn">
+            <span id="btnText">Transform Resume</span>
+            <div id="btnLoader" class="btn-loader hidden">
+              <div class="loader-dot"></div>
+              <div class="loader-dot"></div>
+              <div class="loader-dot"></div>
+            </div>
+          </button>
+        </form>
 
-        const formData = new FormData(form);
+        <div class="preview-section">
+          <h3 class="preview-title">Output Preview</h3>
+          <div id="result" class="result-container">
+            <div class="empty-state">
+              <i class="fas fa-file-export"></i>
+              <p>Your transformed resume will appear here</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
 
-        try {
-            const response = await fetch('/transform', {
-                method: 'POST',
-                body: formData
-            });
+    <footer class="app-footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <img src="assets/logo-icon.svg" alt="" class="footer-logo">
+          <span>CVTransformer Pro</span>
+        </div>
+        <div class="footer-links">
+          <div class="link-group">
+            <h4>Product</h4>
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+            <a href="#">Templates</a>
+            <a href="#">API</a>
+          </div>
+          <div class="link-group">
+            <h4>Resources</h4>
+            <a href="#">Documentation</a>
+            <a href="#">Blog</a>
+            <a href="#">Help Center</a>
+            <a href="#">Webinars</a>
+          </div>
+          <div class="link-group">
+            <h4>Company</h4>
+            <a href="#">About</a>
+            <a href="#">Careers</a>
+            <a href="#">Contact</a>
+            <a href="#">Partners</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="copyright">© 2023 CVTransformer Pro. All rights reserved.</div>
+        <div class="legal-links">
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
+          <a href="#">Cookies</a>
+        </div>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+          <a href="#"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+    </footer>
+  </div>
 
-            if (response.ok) {
-                const data = await response.json();
-                resultDiv.innerHTML = `
-                    <p><strong>${data.message}</strong></p>
-                    <a href="${data.downloadHtml}">Download HTML</a><br>
-                    <a href="${data.downloadDocx}">Download Word (DOCX)</a><br>
-                    <a href="${data.downloadPdf}">Download PDF</a>
-                `;
-            } else {
-                const errorText = await response.text();
-                resultDiv.innerHTML = `<p style="color:red;">Error: ${errorText}</p>`;
-            }
-        } catch (err) {
-            resultDiv.innerHTML = `<p style="color:red;">Unexpected error: ${err.message}</p>`;
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Generate CV';
-            spinner.style.display = 'none';
-        }
-    });
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
